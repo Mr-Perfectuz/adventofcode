@@ -1,3 +1,4 @@
+
 from collections import defaultdict
 
 def find_largest_fully_connected_group(connections):

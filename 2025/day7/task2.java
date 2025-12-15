@@ -10,8 +10,7 @@ public class task2 {
             grid.add(line);
         }
         reader.close();
-        
-        // Find S position
+         
         int startCol = -1;
         int startRow = -1;
         for (int r = 0; r < grid.size(); r++) {
@@ -24,14 +23,12 @@ public class task2 {
         }
         
         int width = grid.get(0).length();
-        
-        // Track timelines: column -> number of timelines at that position
+         
         Map<Integer, Long> timelines = new HashMap<>();
         timelines.put(startCol, 1L);
         
-        long completedTimelines = 0; // Timelines that exited the manifold
-        
-        // Process each row starting from below S
+        long completedTimelines = 0; 
+         
         for (int row = startRow + 1; row < grid.size(); row++) {
             String currentRow = grid.get(row);
             Map<Integer, Long> nextTimelines = new HashMap<>();
@@ -41,32 +38,29 @@ public class task2 {
                 long count = entry.getValue();
                 
                 char ch = currentRow.charAt(col);
-                if (ch == '^') {
-                    // Each timeline splits into two
+                if (ch == '^') { 
                     int leftCol = col - 1;
                     int rightCol = col + 1;
                     
                     if (leftCol >= 0) {
                         nextTimelines.merge(leftCol, count, Long::sum);
                     } else {
-                        completedTimelines += count; // Exited left
+                        completedTimelines += count;  
                     }
                     
                     if (rightCol < width) {
                         nextTimelines.merge(rightCol, count, Long::sum);
                     } else {
-                        completedTimelines += count; // Exited right
+                        completedTimelines += count;  
                     }
-                } else {
-                    // Timeline continues straight down
+                } else { 
                     nextTimelines.merge(col, count, Long::sum);
                 }
             }
             
             timelines = nextTimelines;
         }
-        
-        // Add all remaining active timelines (reached the bottom)
+         
         for (long count : timelines.values()) {
             completedTimelines += count;
         }
